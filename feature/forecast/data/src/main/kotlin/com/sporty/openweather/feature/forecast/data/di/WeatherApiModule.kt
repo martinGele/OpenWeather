@@ -9,7 +9,6 @@ import javax.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.create
 
-/** The feature owns only its endpoint surface — the shared Retrofit comes from :core:network. */
 @Module
 @InstallIn(SingletonComponent::class)
 object WeatherApiModule {

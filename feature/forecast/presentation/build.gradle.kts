@@ -8,4 +8,7 @@ android {
 
 dependencies {
     implementation(project(":feature:forecast:domain"))
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.coil.compose)
 }

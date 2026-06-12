@@ -4,7 +4,6 @@ import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
-/** Enable Jetpack Compose and add the shared Compose dependencies via the BOM. */
 internal fun Project.configureAndroidCompose(
     commonExtension: CommonExtension,
 ) {

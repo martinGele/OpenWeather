@@ -9,11 +9,6 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import okhttp3.Interceptor
 
-/**
- * Backend configuration owned by the composition root: which host the app talks to
- * and how requests are authenticated. Contributed into the shared :core:network
- * client/Retrofit, so the network module stays feature-agnostic.
- */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkConfigModule {

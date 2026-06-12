@@ -8,8 +8,6 @@ import org.gradle.kotlin.dsl.dependencies
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        // AGP 9 ships built-in Kotlin support, so applying com.android.library
-        // already registers the `kotlin` extension — no kotlin.android plugin needed.
         pluginManager.apply("com.android.library")
 
         extensions.configure<LibraryExtension> {

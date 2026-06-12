@@ -4,12 +4,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.project
 
-/**
- * Convention for feature *presentation* modules: an Android library with Compose +
- * Hilt and the shared cross-cutting dependencies (`:core:ui`, `:core:common`).
- * Each presentation module declares its own `:feature:x:domain` — there is no
- * shared `:core:domain`, since features own their vertical slice.
- */
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager) {

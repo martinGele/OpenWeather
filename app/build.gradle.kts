@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.openweather.android.hilt)
 }
 
-// Secrets (e.g. API keys) live in local.properties — gitignored, never committed.
-// CI provides them via -P / env; missing key falls back to empty.
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { load(it) }
@@ -42,18 +40,12 @@ android {
 }
 
 dependencies {
-    // Directly referenced: theme (:core:ui) and the screen entry point.
     implementation(project(":core:ui"))
     implementation(project(":feature:forecast:presentation"))
 
-    // Not referenced in app code, but required on the compile classpath so Hilt
-    // aggregates its @InstallIn modules into the app graph (WeatherRepositoryImpl,
-    // the weather Retrofit config, and the network/dispatcher providers it pulls
-    // in transitively from :core:network and :core:common).
     implementation(project(":feature:forecast:data"))
-
-    // Backend config (base URL + auth interceptor) provided into :core:network.
     implementation(project(":core:network"))
+
     implementation(libs.okhttp.core)
 
     implementation(libs.androidx.core.ktx)

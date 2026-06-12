@@ -13,15 +13,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 private val JAVA_VERSION = JavaVersion.VERSION_11
 private val JVM_TARGET = JvmTarget.JVM_11
 
-/**
- * Configure base Kotlin with Android options. Shared by the application and
- * library convention plugins so SDK levels and compiler flags live in one place.
- */
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension,
 ) {
-    // AGP 9 removed the lambda-DSL overloads from the base CommonExtension
-    // interface, so configure via the property getters instead.
     commonExtension.apply {
         compileSdk = libs.findVersion("compileSdk").get().requiredVersion.toInt()
         defaultConfig.minSdk = libs.findVersion("minSdk").get().requiredVersion.toInt()
@@ -32,7 +26,6 @@ internal fun Project.configureKotlinAndroid(
     configureKotlin<KotlinAndroidProjectExtension>()
 }
 
-/** Configure base Kotlin options for a pure JVM (non-Android) module. */
 internal fun Project.configureKotlinJvm() {
     extensions.configure<JavaPluginExtension> {
         sourceCompatibility = JAVA_VERSION
@@ -42,7 +35,6 @@ internal fun Project.configureKotlinJvm() {
     configureKotlin<KotlinJvmProjectExtension>()
 }
 
-/** Shared Kotlin compiler options for both Android and JVM modules. */
 private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() = configure<T> {
     val compilerOptions = when (this) {
         is KotlinAndroidProjectExtension -> compilerOptions
