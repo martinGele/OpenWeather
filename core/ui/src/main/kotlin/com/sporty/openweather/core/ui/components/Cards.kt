@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -22,11 +22,6 @@ import com.sporty.openweather.core.ui.theme.OnSkyMuted
 import com.sporty.openweather.core.ui.theme.Radius
 import com.sporty.openweather.core.ui.theme.Spacing
 
-/**
- * A frosted-glass card — translucent white fill, hairline white border, no
- * shadow. Depth is the translucency reading against the gradient beneath it, so
- * it must never become opaque. See airbnb/DESIGN.md > glass-card.
- */
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier,
@@ -50,10 +45,7 @@ fun GlassCard(
     }
 }
 
-/**
- * A compact labelled metric ("FEELS LIKE" / "21°") on glass — one cell of the
- * stat grid beneath the hero.
- */
+
 @Composable
 fun StatTile(
     label: String,

@@ -32,11 +32,6 @@ import com.sporty.openweather.core.ui.theme.Radius
 import com.sporty.openweather.core.ui.theme.Rausch
 import com.sporty.openweather.core.ui.theme.Spacing
 
-/**
- * The editable twin of [SearchBarPill]: the same frosted-glass pill and circular
- * Rausch orb, but holding a live text field. Used on the search screen so its
- * input reads identically to the weather screen's search affordance.
- */
 @Composable
 fun SearchFieldPill(
     value: String,
@@ -57,7 +52,9 @@ fun SearchFieldPill(
         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = ImeAction.Search),
         decorationBox = { innerTextField ->
             Surface(
-                modifier = Modifier.fillMaxWidth().height(60.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
                 shape = RoundedCornerShape(Radius.full),
                 color = GlassFill,
                 contentColor = OnSky,

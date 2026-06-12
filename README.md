@@ -89,3 +89,6 @@ All dependency versions are declared in [`gradle/libs.versions.toml`](gradle/lib
 - **compileSdk / targetSdk:** 36
 - **minSdk:** 24
 - **JDK:** 17+ (resolved via the Foojay toolchain resolver)
+
+
+## Project Design done by

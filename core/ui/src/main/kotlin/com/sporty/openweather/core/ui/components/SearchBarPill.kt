@@ -30,14 +30,6 @@ import com.sporty.openweather.core.ui.theme.Radius
 import com.sporty.openweather.core.ui.theme.Rausch
 import com.sporty.openweather.core.ui.theme.Spacing
 
-/**
- * The signature search bar: a frosted-glass pill terminated by a circular Rausch
- * orb — the one accent that survives on every sky. Tapping anywhere opens search.
- * See airbnb/DESIGN.md > search-bar-pill / search-orb.
- *
- * @param searchIcon the magnifying-glass glyph (passed in so core:ui keeps no
- *   icon dependency of its own).
- */
 @Composable
 fun SearchBarPill(
     placeholder: String,
