@@ -6,6 +6,7 @@ import com.sporty.openweather.feature.forecast.domain.model.Weather
 import com.sporty.openweather.feature.forecast.domain.repository.LocationProvider
 import com.sporty.openweather.feature.forecast.domain.repository.WeatherRepository
 import com.sporty.openweather.feature.forecast.domain.usecase.GetWeatherUseCase
+import com.sporty.openweather.feature.forecast.domain.usecase.GetWeeklyForecastUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -56,6 +57,17 @@ class WeatherViewModelTest {
     }
 
     @Test
+    fun `PermissionGranted populates the weekly forecast`() = runTest {
+        val week = List(7) { weather }
+        val viewModel = viewModel(coordinates = coordinates, weeklyFlow = flowOf(week))
+
+        viewModel.onIntent(WeatherIntent.PermissionGranted)
+        advanceUntilIdle()
+
+        assertEquals(week, viewModel.state.value.weeklyForecast)
+    }
+
+    @Test
     fun `PermissionDenied sets a permission error without loading`() = runTest {
         val viewModel = viewModel(coordinates = coordinates)
 
@@ -80,13 +92,19 @@ class WeatherViewModelTest {
     private fun viewModel(
         coordinates: Coordinates?,
         weatherFlow: Flow<Weather> = flowOf(weather),
+        weeklyFlow: Flow<List<Weather>> = flowOf(emptyList()),
     ): WeatherViewModel {
         val repository = object : WeatherRepository {
-            override fun observeWeather(coordinates: Coordinates): Flow<Weather> = weatherFlow
+            override fun forecastCurrentDay(coordinates: Coordinates): Flow<Weather> = weatherFlow
+
+            override fun forecastNextDays(coordinates: Coordinates): Flow<List<Weather>> = weeklyFlow
         }
         val locationProvider = object : LocationProvider {
             override suspend fun currentCoordinates(): Coordinates? = coordinates
         }
-        return WeatherViewModel(GetWeatherUseCase(repository, locationProvider))
+        return WeatherViewModel(
+            GetWeatherUseCase(repository, locationProvider),
+            GetWeeklyForecastUseCase(repository, locationProvider),
+        )
     }
 }

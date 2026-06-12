@@ -5,6 +5,7 @@ import com.sporty.openweather.feature.forecast.domain.model.Weather
 data class WeatherState(
     val isLoading: Boolean = false,
     val weather: Weather? = null,
+    val weeklyForecast: List<Weather> = emptyList(),
     val error: String? = null,
 )
 

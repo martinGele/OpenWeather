@@ -19,10 +19,17 @@ class WeatherRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : WeatherRepository {
 
-    override fun observeWeather(coordinates: Coordinates): Flow<Weather> = flow {
+    override fun forecastCurrentDay(coordinates: Coordinates): Flow<Weather> = flow {
         when (val result = safeApiCall { api.getWeather(coordinates.latitude, coordinates.longitude) }) {
             is NetworkResult.Success -> emit(result.data.toDomain())
-            is NetworkResult.Error -> throw IllegalStateException(result.message)
+            is NetworkResult.Error -> throw Exception(result.message)
+        }
+    }.flowOn(ioDispatcher)
+
+    override fun forecastNextDays(coordinates: Coordinates): Flow<List<Weather>> = flow {
+        when (val result = safeApiCall { api.getDailyForecast(coordinates.latitude, coordinates.longitude) }) {
+            is NetworkResult.Success -> emit(result.data.toDomain())
+            is NetworkResult.Error -> throw Exception(result.message)
         }
     }.flowOn(ioDispatcher)
 }

@@ -47,9 +47,11 @@ class GetWeatherUseCaseTest {
         var requestedCoordinates: Coordinates? = null
             private set
 
-        override fun observeWeather(coordinates: Coordinates): Flow<Weather> {
+        override fun forecastCurrentDay(coordinates: Coordinates): Flow<Weather> {
             requestedCoordinates = coordinates
             return flowOf(weather)
         }
+
+        override fun forecastNextDays(coordinates: Coordinates): Flow<List<Weather>> = flowOf(listOf(weather))
     }
 }

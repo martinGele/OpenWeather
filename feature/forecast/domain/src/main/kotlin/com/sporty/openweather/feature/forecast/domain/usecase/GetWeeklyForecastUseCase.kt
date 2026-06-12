@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 
-class GetWeatherUseCase @Inject constructor(
+class GetWeeklyForecastUseCase @Inject constructor(
     private val repository: WeatherRepository,
     private val locationProvider: LocationProvider,
 ) {
-    operator fun invoke(): Flow<Weather> = flow {
+    operator fun invoke(): Flow<List<Weather>> = flow {
         val coordinates = locationProvider.currentCoordinates() ?: throw LocationUnavailableException()
-        emitAll(repository.forecastCurrentDay(coordinates))
+        emitAll(repository.forecastNextDays(coordinates))
     }
 }

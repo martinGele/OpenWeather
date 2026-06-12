@@ -6,8 +6,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -84,17 +88,62 @@ fun WeatherScreen(
                 Button(onClick = onRetry) { Text(text = "Retry") }
             }
 
-            state.weather != null -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = state.weather.city, style = MaterialTheme.typography.headlineMedium)
-                Text(
-                    text = "${state.weather.temperatureCelsius}°C",
-                    style = MaterialTheme.typography.displaySmall,
-                )
-                AsyncImage(
-                    model = state.weather.iconUrl,
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp),
-                )
+            state.weather != null -> Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = state.weather.city, style = MaterialTheme.typography.headlineMedium)
+                    Text(
+                        text = "${state.weather.temperatureCelsius}°C",
+                        style = MaterialTheme.typography.displaySmall,
+                    )
+                    AsyncImage(
+                        model = state.weather.iconUrl,
+                        contentDescription = null,
+                        modifier = Modifier.size(100.dp),
+                    )
+                }
+
+                if (state.weeklyForecast.isNotEmpty()) {
+                    WeeklyForecast(days = state.weeklyForecast)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WeeklyForecast(
+    days: List<com.sporty.openweather.feature.forecast.domain.model.Weather>,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(text = "7-day forecast", style = MaterialTheme.typography.titleMedium)
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+        ) {
+            items(days) { day ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    AsyncImage(
+                        model = day.iconUrl,
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp),
+                    )
+                    Text(
+                        text = "${day.temperatureCelsius.toInt()}°C",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
             }
         }
     }
