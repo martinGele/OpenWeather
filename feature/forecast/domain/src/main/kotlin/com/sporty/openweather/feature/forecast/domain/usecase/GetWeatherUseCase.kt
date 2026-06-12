@@ -1,6 +1,7 @@
 package com.sporty.openweather.feature.forecast.domain.usecase
 
 import com.sporty.openweather.feature.forecast.domain.location.LocationUnavailableException
+import com.sporty.openweather.feature.forecast.domain.model.Coordinates
 import com.sporty.openweather.feature.forecast.domain.model.Weather
 import com.sporty.openweather.feature.forecast.domain.repository.LocationProvider
 import com.sporty.openweather.feature.forecast.domain.repository.WeatherRepository
@@ -13,8 +14,8 @@ class GetWeatherUseCase @Inject constructor(
     private val repository: WeatherRepository,
     private val locationProvider: LocationProvider,
 ) {
-    operator fun invoke(): Flow<Weather> = flow {
-        val coordinates = locationProvider.currentCoordinates() ?: throw LocationUnavailableException()
-        emitAll(repository.forecastCurrentDay(coordinates))
+    operator fun invoke(coordinates: Coordinates? = null): Flow<Weather> = flow {
+        val target = coordinates ?: locationProvider.currentCoordinates() ?: throw LocationUnavailableException()
+        emitAll(repository.forecastCurrentDay(target))
     }
 }

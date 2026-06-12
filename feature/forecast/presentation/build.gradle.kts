@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.openweather.android.feature)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -10,5 +11,6 @@ dependencies {
     implementation(project(":feature:forecast:domain"))
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
 }

@@ -1,5 +1,6 @@
 package com.sporty.openweather.feature.forecast.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.sporty.openweather.feature.forecast.domain.model.Coordinates
 import com.sporty.openweather.feature.forecast.domain.model.Weather
@@ -105,6 +106,7 @@ class WeatherViewModelTest {
         return WeatherViewModel(
             GetWeatherUseCase(repository, locationProvider),
             GetWeeklyForecastUseCase(repository, locationProvider),
+            SavedStateHandle(),
         )
     }
 }

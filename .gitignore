@@ -8,24 +8,9 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
+# Gradle build output — matches build/ in every module at any depth
+build/
 /captures
 .externalNativeBuild
 .cxx
 local.properties
-
-# Project exclude paths
-/build-logic/convention/build/
-/build-logic/convention/build/classes/kotlin/main/
-/core/common/build/
-/core/common/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
-/core/network/build/
-/core/network/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
-/core/ui/build/
-/feature/forecast/build/
-/feature/forecast/data/build/
-/feature/forecast/data/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
-/feature/forecast/domain/build/
-/feature/forecast/domain/build/classes/kotlin/main/
-/feature/forecast/presentation/build/
-/feature/forecast/presentation/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/

@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.sporty.openweather.core.ui.theme.OpenWeatherTheme
-import com.sporty.openweather.feature.forecast.presentation.WeatherForecast
+import com.sporty.openweather.navigation.OpenWeatherNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             OpenWeatherTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    WeatherForecast(modifier = Modifier.padding(innerPadding))
+                    OpenWeatherNavHost(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

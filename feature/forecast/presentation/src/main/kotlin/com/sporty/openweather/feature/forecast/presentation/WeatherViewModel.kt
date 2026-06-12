@@ -1,7 +1,10 @@
 package com.sporty.openweather.feature.forecast.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.sporty.openweather.feature.forecast.domain.model.Coordinates
 import com.sporty.openweather.feature.forecast.domain.usecase.GetWeatherUseCase
 import com.sporty.openweather.feature.forecast.domain.usecase.GetWeeklyForecastUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,19 +27,25 @@ import javax.inject.Inject
 class WeatherViewModel @Inject constructor(
     private val getWeather: GetWeatherUseCase,
     private val getWeeklyForecast: GetWeeklyForecastUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(WeatherState())
     val state: StateFlow<WeatherState> = _state.asStateFlow()
 
-    // One-time effects (e.g. permission requests). A Channel is consume-once, so events
-    // aren't replayed on recomposition/config change the way persistent state would be.
+
     private val _effect = Channel<WeatherEffect>(Channel.BUFFERED)
     val effect: Flow<WeatherEffect> = _effect.receiveAsFlow()
 
+    init {
+        // SavedStateHandle. When present, load that place's weather instead of GPS.
+        selectedCoordinates()?.let(::loadWeather)
+    }
+
     fun onIntent(intent: WeatherIntent) {
         when (intent) {
-            WeatherIntent.Retry -> viewModelScope.launch {
+            // Skip GPS when a place was already picked from search.
+            WeatherIntent.Retry -> if (selectedCoordinates() == null) viewModelScope.launch {
                 _effect.send(WeatherEffect.RequestLocationPermission)
             }
 
@@ -50,10 +59,18 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private fun loadWeather() {
+    /** Coordinates from the type-safe nav route, or null when launched for the device's location. */
+    private fun selectedCoordinates(): Coordinates? {
+        val route = savedStateHandle.toRoute<WeatherRoute>()
+        val lat = route.lat ?: return null
+        val lon = route.lon ?: return null
+        return Coordinates(lat, lon)
+    }
+
+    private fun loadWeather(coordinates: Coordinates? = null) {
         combine(
-            getWeather(),
-            getWeeklyForecast().catch { emit(emptyList()) },
+            getWeather(coordinates),
+            getWeeklyForecast(coordinates).catch { emit(emptyList()) },
         ) { current, weekly ->
             current to weekly
         }

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.openweather.android.application)
     alias(libs.plugins.openweather.android.compose)
     alias(libs.plugins.openweather.android.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val localProperties = Properties().apply {
@@ -42,8 +43,10 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:forecast:presentation"))
+    implementation(project(":feature:search:presentation"))
 
     implementation(project(":feature:forecast:data"))
+    implementation(project(":feature:search:data"))
     implementation(project(":core:network"))
 
     implementation(libs.okhttp.core)
@@ -55,4 +58,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.navigation.compose)
 }
+

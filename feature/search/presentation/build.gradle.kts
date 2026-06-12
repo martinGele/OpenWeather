@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:search:domain"))
+    api(project(":feature:search:domain"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.coil.compose)

@@ -1,8 +1,6 @@
 package com.sporty.openweather.feature.forecast.presentation
 
-import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,24 +20,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.sporty.openweather.feature.forecast.domain.model.Weather
 
 @Composable
 fun WeatherForecast(
+    goToSearch: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WeatherViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions(),
-    ) { grants ->
-        val granted = grants[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-            grants[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+    val requestLocationPermission = rememberLocationPermissionRequest { granted ->
         viewModel.onIntent(
             if (granted) WeatherIntent.PermissionGranted else WeatherIntent.PermissionDenied,
         )
@@ -47,22 +45,19 @@ fun WeatherForecast(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                WeatherEffect.RequestLocationPermission -> permissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                    ),
-                )
+                WeatherEffect.RequestLocationPermission -> requestLocationPermission()
             }
         }
     }
 
+    // Triggers GPS-based weather on first show; ignored by the VM if a place was picked from search.
     LaunchedEffect(Unit) { viewModel.onIntent(WeatherIntent.Retry) }
 
     WeatherScreen(
         state = state,
         onRetry = { viewModel.onIntent(WeatherIntent.Retry) },
         modifier = modifier,
+        goToSearch = goToSearch,
     )
 }
 
@@ -70,6 +65,7 @@ fun WeatherForecast(
 fun WeatherScreen(
     state: WeatherState,
     onRetry: () -> Unit,
+    goToSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -93,6 +89,15 @@ fun WeatherScreen(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_search_24),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable { goToSearch() },
+                    )
                     Text(text = state.weather.city, style = MaterialTheme.typography.headlineMedium)
                     Text(
                         text = "${state.weather.temperatureCelsius}°C",
@@ -115,7 +120,7 @@ fun WeatherScreen(
 
 @Composable
 private fun WeeklyForecast(
-    days: List<com.sporty.openweather.feature.forecast.domain.model.Weather>,
+    days: List<Weather>,
     modifier: Modifier = Modifier,
 ) {
     Column(
