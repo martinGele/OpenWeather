@@ -36,6 +36,7 @@ import coil.compose.AsyncImage
 import com.sporty.openweather.core.ui.components.PrimaryButton
 import com.sporty.openweather.core.ui.components.SearchBarPill
 import com.sporty.openweather.core.ui.components.StatTile
+import com.sporty.openweather.core.ui.components.WeatherSkyAnimation
 import com.sporty.openweather.core.ui.theme.ErrorOnSky
 import com.sporty.openweather.core.ui.theme.GlassBorder
 import com.sporty.openweather.core.ui.theme.OnSky
@@ -99,6 +100,9 @@ fun WeatherScreen(
             .fillMaxSize()
             .background(Brush.verticalGradient(sky)),
     ) {
+        // The sky acts out the weather behind the (translucent) content.
+        state.weather?.let { WeatherSkyAnimation(condition = it.condition, isDay = it.isDay()) }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -109,7 +113,7 @@ fun WeatherScreen(
             Spacer(Modifier.height(Spacing.base))
             SearchBarPill(
                 placeholder = "Search for a city",
-                searchIcon = painterResource(id = R.drawable.baseline_search_24),
+                searchIcon = painterResource(id = com.sporty.openweather.core.ui.R.drawable.ic_search),
                 onClick = goToSearch,
             )
             Spacer(Modifier.height(Spacing.lg))

@@ -13,23 +13,35 @@ object Sky {
     /** Default backdrop when there is no observation yet (loading, search screen). */
     val default: List<Color> = clearDay
 
+    /** Coarse weather family — shared by [gradientFor] and the animated sky layer. */
+    fun kindOf(condition: String): SkyKind {
+        val c = condition.lowercase()
+        return when {
+            "thunder" in c -> SkyKind.STORM
+            "snow" in c -> SkyKind.SNOW
+            "rain" in c || "drizzle" in c -> SkyKind.RAIN
+            "cloud" in c -> SkyKind.CLOUDS
+            "mist" in c || "fog" in c || "haze" in c || "smoke" in c -> SkyKind.MIST
+            else -> SkyKind.CLEAR
+        }
+    }
+
     /**
      * @param condition OpenWeather condition group, e.g. "Clear", "Rain", "Snow".
      * @param isDay     whether the observation falls between sunrise and sunset.
      */
-    fun gradientFor(condition: String, isDay: Boolean): List<Color> {
-        val c = condition.lowercase()
-        return when {
-            "thunder" in c -> storm
-            "snow" in c -> if (isDay) snowDay else snowNight
-            "rain" in c || "drizzle" in c -> if (isDay) rainDay else rainNight
-            "cloud" in c -> if (isDay) cloudsDay else cloudsNight
-            "mist" in c || "fog" in c || "haze" in c || "smoke" in c ->
-                if (isDay) mistDay else mistNight
-            else -> if (isDay) clearDay else clearNight
+    fun gradientFor(condition: String, isDay: Boolean): List<Color> =
+        when (kindOf(condition)) {
+            SkyKind.STORM -> storm
+            SkyKind.SNOW -> if (isDay) snowDay else snowNight
+            SkyKind.RAIN -> if (isDay) rainDay else rainNight
+            SkyKind.CLOUDS -> if (isDay) cloudsDay else cloudsNight
+            SkyKind.MIST -> if (isDay) mistDay else mistNight
+            SkyKind.CLEAR -> if (isDay) clearDay else clearNight
         }
-    }
 }
+
+enum class SkyKind { CLEAR, CLOUDS, RAIN, STORM, SNOW, MIST }
 
 private val clearDay = listOf(Color(0xFF1E78C2), Color(0xFF4FA0DC), Color(0xFF8FC5EF))
 private val clearNight = listOf(Color(0xFF0B1026), Color(0xFF1B2450), Color(0xFF34407A))

@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,14 +25,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sporty.openweather.core.ui.components.SearchFieldPill
+import com.sporty.openweather.core.ui.components.WeatherSkyAnimation
 import com.sporty.openweather.core.ui.theme.ErrorOnSky
 import com.sporty.openweather.core.ui.theme.GlassBorder
 import com.sporty.openweather.core.ui.theme.OnSky
 import com.sporty.openweather.core.ui.theme.OnSkyMuted
-import com.sporty.openweather.core.ui.theme.Radius
-import com.sporty.openweather.core.ui.theme.Rausch
 import com.sporty.openweather.core.ui.theme.Sky
 import com.sporty.openweather.core.ui.theme.Spacing
 import com.sporty.openweather.feature.search.domain.model.Coordinates
@@ -73,6 +71,10 @@ fun SearchScreen(
             .fillMaxSize()
             .background(Brush.verticalGradient(Sky.default)),
     ) {
+        // Clear sky with the sun pushed well below the title + search bar, into the
+        // empty space over the results list.
+        WeatherSkyAnimation(condition = "Clear", isDay = true, sunHeightFraction = 0.45f)
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,25 +89,14 @@ fun SearchScreen(
                 modifier = Modifier.padding(top = Spacing.lg),
             )
 
-            OutlinedTextField(
+            SearchFieldPill(
                 value = query,
                 onValueChange = {
                     query = it
                     onIntent(SearchIntent.QueryChanged(it))
                 },
-                placeholder = { Text("Search for a city") },
-                singleLine = true,
-                shape = RoundedCornerShape(Radius.sm),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = OnSky,
-                    unfocusedBorderColor = GlassBorder,
-                    focusedTextColor = OnSky,
-                    unfocusedTextColor = OnSky,
-                    focusedPlaceholderColor = OnSkyMuted,
-                    unfocusedPlaceholderColor = OnSkyMuted,
-                    cursorColor = Rausch,
-                ),
-                modifier = Modifier.fillMaxWidth(),
+                placeholder = "Search for a city",
+                searchIcon = painterResource(id = com.sporty.openweather.core.ui.R.drawable.ic_search),
             )
 
             Box(
