@@ -49,6 +49,10 @@ class WeatherViewModel @Inject constructor(
                 _effect.send(WeatherEffect.RequestLocationPermission)
             }
 
+            WeatherIntent.UseCurrentLocation -> viewModelScope.launch {
+                _effect.send(WeatherEffect.RequestLocationPermission)
+            }
+
             WeatherIntent.PermissionGranted -> loadWeather()
             WeatherIntent.PermissionDenied -> _state.update {
                 it.copy(

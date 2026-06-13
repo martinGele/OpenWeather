@@ -21,7 +21,7 @@ class GetWeatherUseCaseTest {
     @Test
     fun `emits weather for the current coordinates`() = runTest {
         val repository = FakeWeatherRepository(weather)
-        val useCase = GetWeatherUseCase(repository, FakeLocationProvider(coordinates = coordinates))
+        val useCase = GetWeatherUseCase(repository, ResolveCoordinatesUseCase(FakeLocationProvider(coordinates = coordinates)))
 
         useCase().test {
             assertEquals(weather, awaitItem())
@@ -32,7 +32,7 @@ class GetWeatherUseCaseTest {
 
     @Test
     fun `throws LocationUnavailableException when coordinates are unavailable`() = runTest {
-        val useCase = GetWeatherUseCase(FakeWeatherRepository(weather), FakeLocationProvider(coordinates = null))
+        val useCase = GetWeatherUseCase(FakeWeatherRepository(weather), ResolveCoordinatesUseCase(FakeLocationProvider(coordinates = null)))
 
         useCase().test {
             assertTrue(awaitError() is LocationUnavailableException)

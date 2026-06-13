@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.sporty.openweather.core.ui.components.GlassIconButton
 import com.sporty.openweather.core.ui.components.PrimaryButton
 import com.sporty.openweather.core.ui.components.SearchBarPill
 import com.sporty.openweather.core.ui.components.StatTile
@@ -41,7 +42,6 @@ import com.sporty.openweather.core.ui.theme.ErrorOnSky
 import com.sporty.openweather.core.ui.theme.GlassBorder
 import com.sporty.openweather.core.ui.theme.OnSky
 import com.sporty.openweather.core.ui.theme.OnSkyMuted
-import com.sporty.openweather.core.ui.theme.Rausch
 import com.sporty.openweather.core.ui.theme.Sky
 import com.sporty.openweather.core.ui.theme.Spacing
 import com.sporty.openweather.feature.forecast.domain.model.Weather
@@ -77,6 +77,7 @@ fun WeatherForecast(
     WeatherScreen(
         state = state,
         onRetry = { viewModel.onIntent(WeatherIntent.Retry) },
+        onUseCurrentLocation = { viewModel.onIntent(WeatherIntent.UseCurrentLocation) },
         modifier = modifier,
         goToSearch = goToSearch,
     )
@@ -86,6 +87,7 @@ fun WeatherForecast(
 fun WeatherScreen(
     state: WeatherState,
     onRetry: () -> Unit,
+    onUseCurrentLocation: () -> Unit,
     goToSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -111,11 +113,23 @@ fun WeatherScreen(
                 .padding(horizontal = Spacing.lg),
         ) {
             Spacer(Modifier.height(Spacing.base))
-            SearchBarPill(
-                placeholder = "Search for a city",
-                searchIcon = painterResource(id = com.sporty.openweather.core.ui.R.drawable.ic_search),
-                onClick = goToSearch,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+            ) {
+                SearchBarPill(
+                    placeholder = "Search for a city",
+                    searchIcon = painterResource(id = com.sporty.openweather.core.ui.R.drawable.ic_search),
+                    onClick = goToSearch,
+                    modifier = Modifier.weight(1f),
+                )
+                GlassIconButton(
+                    icon = painterResource(id = com.sporty.openweather.core.ui.R.drawable.ic_my_location),
+                    contentDescription = "Use my location",
+                    onClick = onUseCurrentLocation,
+                )
+            }
             Spacer(Modifier.height(Spacing.lg))
 
             when {

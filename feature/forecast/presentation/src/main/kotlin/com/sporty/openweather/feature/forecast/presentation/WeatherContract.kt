@@ -11,9 +11,8 @@ data class WeatherState(
 
 sealed interface WeatherIntent {
     data object Retry : WeatherIntent
-
+    data object UseCurrentLocation : WeatherIntent
     data object PermissionGranted : WeatherIntent
-
     data object PermissionDenied : WeatherIntent
 }
 

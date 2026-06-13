@@ -62,8 +62,7 @@ fun SearchScreen(
     onPlaceSelected: (Coordinates) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // The text field owns its value locally so typing is instant and doesn't round-trip
-    // through the ViewModel; each change feeds the debounced search.
+
     var query by rememberSaveable { mutableStateOf("") }
 
     Box(
@@ -71,8 +70,7 @@ fun SearchScreen(
             .fillMaxSize()
             .background(Brush.verticalGradient(Sky.default)),
     ) {
-        // Clear sky with the sun pushed well below the title + search bar, into the
-        // empty space over the results list.
+
         WeatherSkyAnimation(condition = "Clear", isDay = true, sunHeightFraction = 0.45f)
 
         Column(
