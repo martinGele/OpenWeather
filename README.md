@@ -91,4 +91,40 @@ All dependency versions are declared in [`gradle/libs.versions.toml`](gradle/lib
 - **JDK:** 17+ (resolved via the Foojay toolchain resolver)
 
 
-## Project Design done by
+## Design
+
+The UI is **spec-driven**: the visual language is captured in a structured design document — [`airbnb/DESIGN.md`](airbnb/DESIGN.md) — and the `:core:ui` module is a faithful translation of that spec into Compose. The document is the single source of truth; the code follows it, not the other way around.
+
+### What `DESIGN.md` is
+
+`DESIGN.md` is a design-token + guideline file with two parts:
+
+- **YAML front matter** — machine-readable tokens: `colors`, `typography`, `rounded` (radii), `spacing`, `sky-gradients`, and a `components` catalog. Values cross-reference each other (e.g. a component's `backgroundColor: "{colors.glass-fill}"`), so the system stays consistent.
+- **Prose sections** — `Overview`, `Colors`, `Typography`, `Layout`, `Shapes & Elevation`, per-component specs, and explicit **Do's & Don'ts** that encode intent (e.g. *"keep Rausch to the orb and primary action only"*, *"glass must stay translucent — no drop shadows"*).
+
+The current spec describes an **atmospheric-sky** weather aesthetic: a full-bleed vertical gradient that is *selected from the live data* (weather condition × day/night), frosted-glass content, white-on-sky type, and a single accent — Rausch `#ff385c` — that survives on any sky.
+
+### How the spec maps to code
+
+Every token group in `DESIGN.md` has a direct home in `:core:ui`:
+
+| `DESIGN.md` section | Implemented in |
+| --- | --- |
+| `colors` (incl. on-sky + glass tokens) | [`theme/Color.kt`](core/ui/src/main/kotlin/com/sporty/openweather/core/ui/theme/Color.kt) |
+| `typography` hierarchy | [`theme/Type.kt`](core/ui/src/main/kotlin/com/sporty/openweather/core/ui/theme/Type.kt) (mapped onto Material 3 type slots) |
+| `spacing` + `rounded` | [`theme/Dimens.kt`](core/ui/src/main/kotlin/com/sporty/openweather/core/ui/theme/Dimens.kt) (`Spacing`, `Radius`) |
+| color scheme assembly | [`theme/Theme.kt`](core/ui/src/main/kotlin/com/sporty/openweather/core/ui/theme/Theme.kt) |
+| `sky-gradients` + condition rules | [`theme/Sky.kt`](core/ui/src/main/kotlin/com/sporty/openweather/core/ui/theme/Sky.kt) (`Sky.gradientFor`, `SkyKind`) |
+| `components` catalog | [`core/ui/.../components/`](core/ui/src/main/kotlin/com/sporty/openweather/core/ui/components) — `PrimaryButton`/`SecondaryButton`, `GlassCard`/`StatTile`, `SearchBarPill`/`SearchFieldPill`, and the animated `WeatherSkyAnimation` |
+
+Because tokens live in one place, the feature screens (`WeatherScreen`, `SearchScreen`) never hard-code a hex, radius, or spacing value — they compose the named tokens and components, exactly as the spec's component entries prescribe.
+
+### Workflow
+
+The design was built — and re-styled — by iterating on the document first, then re-deriving the implementation:
+
+1. **Write/adjust `DESIGN.md`** — change a token, a component spec, or the overall direction in the front matter and prose.
+2. **Re-derive `:core:ui`** — update the matching theme file or component so the code matches the new spec (keeping cross-references intact).
+3. **Screens follow for free** — since features only reference tokens/components, most visual changes need no screen edits.
+
+This is how the app moved through entirely different looks (an editorial style, then a marketplace style, then the current atmospheric sky) by rewriting the spec and letting `:core:ui` follow — and how smaller tweaks (the gradient palette, the glass opacity, the animated weather layer) were made as localized, spec-aligned changes.
