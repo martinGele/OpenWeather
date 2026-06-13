@@ -8,6 +8,6 @@ interface GeocodingApi {
     @GET("geo/1.0/direct")
     suspend fun searchPlaces(
         @Query("q") query: String,
-        @Query("limit") limit: Int = 5,
+        @Query("limit") limit: Int = 15,
     ): List<PlaceDto>
 }

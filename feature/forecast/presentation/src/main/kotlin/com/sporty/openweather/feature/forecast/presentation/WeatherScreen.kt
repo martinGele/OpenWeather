@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -40,8 +39,10 @@ import com.sporty.openweather.core.ui.components.StatTile
 import com.sporty.openweather.core.ui.components.WeatherSkyAnimation
 import com.sporty.openweather.core.ui.theme.ErrorOnSky
 import com.sporty.openweather.core.ui.theme.GlassBorder
+import com.sporty.openweather.core.ui.theme.IconSize
 import com.sporty.openweather.core.ui.theme.OnSky
 import com.sporty.openweather.core.ui.theme.OnSkyMuted
+import com.sporty.openweather.core.ui.theme.Size
 import com.sporty.openweather.core.ui.theme.Sky
 import com.sporty.openweather.core.ui.theme.Spacing
 import com.sporty.openweather.feature.forecast.domain.model.Weather
@@ -136,7 +137,7 @@ fun WeatherScreen(
                 state.isLoading -> Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(320.dp),
+                        .height(Size.heroBand),
                     contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator(color = OnSky)
@@ -212,7 +213,7 @@ private fun CurrentWeather(
             AsyncImage(
                 model = weather.iconUrl,
                 contentDescription = weather.condition,
-                modifier = Modifier.size(120.dp),
+                modifier = Modifier.size(IconSize.hero),
             )
         }
 
@@ -288,7 +289,7 @@ private fun DayRow(
         AsyncImage(
             model = day.iconUrl,
             contentDescription = day.condition,
-            modifier = Modifier.size(44.dp),
+            modifier = Modifier.size(IconSize.lg),
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -330,7 +331,7 @@ private fun ErrorState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(320.dp),
+            .height(Size.heroBand),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Spacing.base, Alignment.CenterVertically),
     ) {

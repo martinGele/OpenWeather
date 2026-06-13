@@ -8,11 +8,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.sporty.openweather.core.ui.theme.OnPrimary
 import com.sporty.openweather.core.ui.theme.Radius
 import com.sporty.openweather.core.ui.theme.Rausch
 import com.sporty.openweather.core.ui.theme.RauschDisabled
+import com.sporty.openweather.core.ui.theme.Size
 import com.sporty.openweather.core.ui.theme.Spacing
 
 
@@ -25,7 +25,7 @@ fun PrimaryButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 48.dp),
+        modifier = modifier.heightIn(min = Size.buttonMinHeight),
         enabled = enabled,
         shape = RoundedCornerShape(Radius.sm),
         colors = ButtonDefaults.buttonColors(
@@ -34,7 +34,7 @@ fun PrimaryButton(
             disabledContainerColor = RauschDisabled,
             disabledContentColor = OnPrimary,
         ),
-        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = 14.dp),
+        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = Size.buttonVerticalPadding),
     ) {
         Text(text = text)
     }

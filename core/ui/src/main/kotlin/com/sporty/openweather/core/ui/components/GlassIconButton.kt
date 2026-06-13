@@ -11,10 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.sporty.openweather.core.ui.theme.BorderWidth
 import com.sporty.openweather.core.ui.theme.GlassBorder
 import com.sporty.openweather.core.ui.theme.GlassFill
+import com.sporty.openweather.core.ui.theme.IconSize
 import com.sporty.openweather.core.ui.theme.OnSky
+import com.sporty.openweather.core.ui.theme.Size
 
 
 @Composable
@@ -23,7 +25,7 @@ fun GlassIconButton(
     contentDescription: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    size: Dp = 60.dp,
+    size: Dp = Size.control,
 ) {
     Surface(
         onClick = onClick,
@@ -31,14 +33,14 @@ fun GlassIconButton(
         shape = CircleShape,
         color = GlassFill,
         contentColor = OnSky,
-        border = BorderStroke(1.dp, GlassBorder),
+        border = BorderStroke(BorderWidth.hairline, GlassBorder),
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
                 painter = icon,
                 contentDescription = contentDescription,
                 tint = OnSky,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(IconSize.md),
             )
         }
     }

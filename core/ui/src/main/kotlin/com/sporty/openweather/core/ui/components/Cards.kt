@@ -14,7 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.sporty.openweather.core.ui.theme.BorderWidth
+import com.sporty.openweather.core.ui.theme.Elevation
 import com.sporty.openweather.core.ui.theme.GlassBorder
 import com.sporty.openweather.core.ui.theme.GlassFill
 import com.sporty.openweather.core.ui.theme.OnSky
@@ -34,9 +35,9 @@ fun GlassCard(
         shape = RoundedCornerShape(cornerRadius),
         color = GlassFill,
         contentColor = OnSky,
-        border = BorderStroke(1.dp, GlassBorder),
-        shadowElevation = 0.dp,
-        tonalElevation = 0.dp,
+        border = BorderStroke(BorderWidth.hairline, GlassBorder),
+        shadowElevation = Elevation.none,
+        tonalElevation = Elevation.none,
     ) {
         Column(
             modifier = Modifier.padding(padding),

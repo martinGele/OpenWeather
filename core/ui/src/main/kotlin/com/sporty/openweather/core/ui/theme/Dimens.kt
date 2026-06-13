@@ -31,3 +31,34 @@ object Radius {
     val xl = 32.dp
     val full = 9999.dp
 }
+
+/**
+ * Fixed component footprints that fall outside the spacing scale — minimum
+ * touch targets, pill / orb heights, and the hero band used by loading, error,
+ * and empty states.
+ */
+object Size {
+    val touchTarget = 44.dp
+    val buttonMinHeight = 48.dp
+    val buttonVerticalPadding = 14.dp
+    val control = 60.dp
+    val heroBand = 320.dp
+}
+
+/** Icon glyph sizes, from inline affordances up to the big conditions image. */
+object IconSize {
+    val sm = 20.dp
+    val md = 22.dp
+    val lg = 44.dp
+    val hero = 120.dp
+}
+
+/** Hairline strokes the glass surfaces are outlined with. */
+object BorderWidth {
+    val hairline = 1.dp
+}
+
+/** Elevation tokens — every glass surface stays intentionally flat. */
+object Elevation {
+    val none = 0.dp
+}

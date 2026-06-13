@@ -19,14 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.dp
+import com.sporty.openweather.core.ui.theme.BorderWidth
+import com.sporty.openweather.core.ui.theme.Elevation
 import com.sporty.openweather.core.ui.theme.GlassBorder
 import com.sporty.openweather.core.ui.theme.GlassFill
+import com.sporty.openweather.core.ui.theme.IconSize
 import com.sporty.openweather.core.ui.theme.OnPrimary
 import com.sporty.openweather.core.ui.theme.OnSky
 import com.sporty.openweather.core.ui.theme.OnSkyMuted
 import com.sporty.openweather.core.ui.theme.Radius
 import com.sporty.openweather.core.ui.theme.Rausch
+import com.sporty.openweather.core.ui.theme.Size
 import com.sporty.openweather.core.ui.theme.Spacing
 
 @Composable
@@ -38,13 +41,13 @@ fun SearchBarPill(
 ) {
     Surface(
         modifier = modifier
-            .height(60.dp)
+            .height(Size.control)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(Radius.full),
         color = GlassFill,
         contentColor = OnSky,
-        border = BorderStroke(1.dp, GlassBorder),
-        shadowElevation = 0.dp,
+        border = BorderStroke(BorderWidth.hairline, GlassBorder),
+        shadowElevation = Elevation.none,
     ) {
         Row(
             modifier = Modifier.padding(start = Spacing.lg, end = Spacing.sm),
@@ -58,7 +61,7 @@ fun SearchBarPill(
             )
             Box(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(Size.touchTarget)
                     .clip(CircleShape)
                     .background(Rausch),
                 contentAlignment = Alignment.Center,
@@ -67,7 +70,7 @@ fun SearchBarPill(
                     painter = searchIcon,
                     contentDescription = "Search",
                     tint = OnPrimary,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(IconSize.sm),
                 )
             }
         }
