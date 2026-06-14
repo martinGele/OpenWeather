@@ -8,6 +8,7 @@ import com.sporty.openweather.feature.forecast.domain.repository.LocationProvide
 import com.sporty.openweather.feature.forecast.domain.repository.WeatherRepository
 import com.sporty.openweather.feature.forecast.domain.usecase.GetWeatherUseCase
 import com.sporty.openweather.feature.forecast.domain.usecase.GetWeeklyForecastUseCase
+import com.sporty.openweather.feature.forecast.domain.usecase.ResolveCoordinatesUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -103,9 +104,10 @@ class WeatherViewModelTest {
         val locationProvider = object : LocationProvider {
             override suspend fun currentCoordinates(): Coordinates? = coordinates
         }
+        val resolveCoordinates = ResolveCoordinatesUseCase(locationProvider)
         return WeatherViewModel(
-            GetWeatherUseCase(repository, locationProvider),
-            GetWeeklyForecastUseCase(repository, locationProvider),
+            GetWeatherUseCase(repository, resolveCoordinates),
+            GetWeeklyForecastUseCase(repository, resolveCoordinates),
             SavedStateHandle(),
         )
     }
